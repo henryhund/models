@@ -73,7 +73,8 @@ create or replace view {schema}.snowplow_marketing_campaign_influence as (
 
 create or replace view {schema}.snowplow_marketing_campaign_influence_first_forms_submitted as (
   select
-    ci.*
+    ci.*,
+    mu."@first_form_submit"
   from
     {schema}.snowplow_marketing_campaign_influence ci
   join
@@ -81,14 +82,5 @@ create or replace view {schema}.snowplow_marketing_campaign_influence_first_form
     on mu."@userid" = ci."@userid"
   where
     ci."@first_event_timestamp" < mu."@first_form_submit"
-  group by
-    a."@user_id",
-    e.mkt_campaign,
-    e.mkt_medium,
-    e.mkt_source,
-    e.mkt_term,
-    e.mkt_content
-  order by
-    "@user_id" ASC
 
 );
